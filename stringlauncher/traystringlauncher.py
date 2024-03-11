@@ -4,6 +4,7 @@ import tkinter as tk
 from pynput.keyboard import Controller, Key
 from PIL import Image
 from pystray import Icon as icon, Menu as menu, MenuItem as item
+from os import path
 
 root = tk.Tk()
 root.withdraw()
@@ -21,7 +22,7 @@ char_mappings = {
     '=': (Key.shift, '0'),
     '?': (Key.shift, '+'),
     '`': (Key.shift, '´'),
-    #'@': (Key.alt_gr, '2'),
+    '@': (Key.alt_gr, '2'),
     '£': (Key.alt_gr, '3'),
     '$': (Key.alt_gr, '4'),
     '€': (Key.alt_gr, '5'),
@@ -88,10 +89,6 @@ def simulate_keystrokes(text, delay):
             keyboard.release(char)
             keyboard.release(modifier)
         else:
-            if hidden_char in ['@', '£', '$', '€', '{', '[', ']', '}', '\\', '|']:
-                keyboard.type(hidden_char)
-                continue
-            
             keyboard.type(hidden_char)
 
         previous_char = hidden_char
@@ -114,7 +111,17 @@ def set_delay():
         delay_seconds = delay
 
 def create_tray_icon():
-    icon_image = Image.open(f'C:\\Users\\emilt\\git\\StringLauncher\\stringlauncher\\favicon.ico')
+    # Dynamic path:
+    # Directory within the Git repository
+    repo_dir = "stringlauncher"
+    # Dynamic subdirectory within the repository
+    dynamic_subdir = "stringlauncher"
+    
+    # Create dynamic path
+    dynamic_path = path.join(repo_dir, dynamic_subdir)
+
+    icon_image = Image.open(f"{dynamic_path}\\favicon.ico'")
+    
     tray_icon = icon("StringLauncher", icon_image, menu=menu(
         item("Type Text", ask_for_text),
         item("Set Delay", set_delay),
